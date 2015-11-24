@@ -1,26 +1,30 @@
-//
-//  AppDelegate.m
-//  SheetDemo
-//
-//  Created by Jerry on 15/11/24.
-//  Copyright © 2015 Jerry. All rights reserved.
-//
-
 #import "AppDelegate.h"
 
 @interface AppDelegate ()
 
 @property (weak) IBOutlet NSWindow *window;
+@property (weak) IBOutlet NSWindow *sheet;
+
 @end
 
 @implementation AppDelegate
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    // Insert code here to initialize your application
+- (IBAction)showSheet:(id)sender {
+    [self.window beginSheet:self.sheet
+     completionHandler:^void(
+                             NSModalResponse modalResponse) {
+         NSLog(@"Got response: %ld", modalResponse) ;
+     }] ;
 }
 
-- (void)applicationWillTerminate:(NSNotification *)aNotification {
-    // Insert code here to tear down your application
+- (IBAction)done:(id)sender {
+    NSWindow* parentWindow = [self.sheet parentWindow] ;
+    if (!parentWindow) {
+        NSLog(@"Nil parentWindow!  Workaround being used") ;
+        parentWindow = self.window ;
+    }
+    [parentWindow endSheet:self.sheet
+                returnCode:123] ;
 }
 
 @end
