@@ -13,18 +13,19 @@
     [self.window beginSheet:self.sheet
      completionHandler:^void(
                              NSModalResponse modalResponse) {
-         NSLog(@"Got response: %ld", modalResponse) ;
+         NSLog(@"Completion handler got response: %ld", modalResponse) ;
      }] ;
 }
 
 - (IBAction)done:(id)sender {
-    NSWindow* parentWindow = [self.sheet parentWindow] ;
-    if (!parentWindow) {
-        NSLog(@"Nil parentWindow!  Workaround being used") ;
-        parentWindow = self.window ;
-    }
-    [parentWindow endSheet:self.sheet
-                returnCode:123] ;
+    NSLog(@"Done") ;
+    NSWindow* sheetParentWindow = self.sheet.sheetParent ;
+    
+    [sheetParentWindow endSheet:self.sheet
+                     returnCode:1234] ;
+    /* If, instead of the above, you send the message without the return
+     code, [NSWindow endSheet:], the completion handler will get modal
+     response NSModalResponseStop. */
 }
 
 @end
